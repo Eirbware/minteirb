@@ -1,6 +1,6 @@
 autoinstall:
   version: 1
-  name: "Eirbuntu"
+  name: "Minteirb"
   timezone: "Europe/Paris"
   
   interactive-sections:

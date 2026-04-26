@@ -2,9 +2,9 @@
 <!DOCTYPE wallpapers SYSTEM "gnome-wp-list.dtd">
 <wallpapers>
   <wallpaper>
-    <name>Eirbuntu</name>
-    <filename>/usr/share/backgrounds/eirbuntu-background.png</filename>
-    <filename-dark>/usr/share/backgrounds/eirbuntu-background.png</filename-dark>
+    <name>minteirb</name>
+    <filename>/usr/share/backgrounds/minteirb-background.png</filename>
+    <filename-dark>/usr/share/backgrounds/minteirb-background.png</filename-dark>
     <options>zoom</options>
     <pcolor>#2c001e</pcolor>
     <scolor>#2c001e</scolor>

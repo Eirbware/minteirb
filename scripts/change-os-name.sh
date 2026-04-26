@@ -1,2 +1,2 @@
 #!/bin/bash
-sed -i 's/Ubuntu/Eirbuntu/' /boot/grub/grub.cfg
+sed -i 's/Linux Mint/Minteirb/' /boot/grub/grub.cfg

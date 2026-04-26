@@ -66,8 +66,8 @@ cd /app
 #cd /app
 
 ### Changing the name in grub
-sed -i -e 's/Ubuntu/Eirbuntu/g' $TMP_DIR/boot/grub/loopback.cfg
-sed -i -e 's/Ubuntu/Eirbuntu/g' $TMP_DIR/boot/grub/grub.cfg
+sed -i -e 's/Linux Mint/Minteirb/g' $TMP_DIR/boot/grub/loopback.cfg
+sed -i -e 's/Linux Mint/Minteirb/g' $TMP_DIR/boot/grub/grub.cfg
 
 ### Removing splash screen (ubuntu logo during boot)
 sed -i -e 's/splash//' $TMP_DIR/boot/grub/grub.cfg
@@ -78,8 +78,8 @@ MBR_FILE=/mbr_copy.bin
 dd if=$ISO bs=1 count=432 of=$MBR_FILE
 
 ### Repackaging iso
-NEW_ISO_PATH=/app/new-iso/$(ls /app/iso | head -n 1 | sed 's/ubuntu/eirbuntu/')
-xorriso -as mkisofs -r -V "Eirbuntu" \
+NEW_ISO_PATH=/app/new-iso/$(ls /app/iso | head -n 1 | sed 's/ubuntu/minteirb/')
+xorriso -as mkisofs -r -V "minteirb" \
   -o $NEW_ISO_PATH\
   -J -l -c boot.catalog\
   -isohybrid-mbr $MBR_FILE \

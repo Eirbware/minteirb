@@ -7,4 +7,4 @@ sudo perl ./install-tl --no-interaction
 YEAR=$(date +%G)
 echo 'export PATH=$PATH:/usr/local/texlive/'$YEAR'/bin/x86_64-linux"' >> ~/.bashrc 
 source ~/.bashrc 
-echo "LaTeX installed !"
+echo "LaTeX installed!"
