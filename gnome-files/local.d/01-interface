@@ -1,6 +1,0 @@
-# dconf path
-[org/gnome/desktop/interface]
-
-# dconf config
-color-scheme="prefer-dark"
-gtk-theme="minteirb"

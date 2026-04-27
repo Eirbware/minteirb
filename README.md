@@ -2,7 +2,7 @@ This is the script used to create the minteirb iso.
 
 ## How to use
 
-After cloning the repo, insert a ubuntu iso (tested with ubuntu 24.04 LTS) inside the `iso` folder.
+After cloning the repo, insert a linux mint iso (tested with nothing actually) inside the `iso` folder.
 Afterwards, run:
 
 ```sh 

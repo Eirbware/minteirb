@@ -29,7 +29,7 @@ autoinstall:
 #    - npm
 
   late-commands:
-    - curtin in-target -- /bin/bash /cdrom/scripts/commands-after-install.sh 2>> /error.log
+    - curtin in-target -- /bin/bash /cdrom/scripts/commands_after_install.sh 2>> /error.log
 
   early-commands:
-    - /cdrom/scripts/commands-before-install.sh 2>> /error.log
+    - /cdrom/scripts/commands_before_install.sh 2>> /error.log

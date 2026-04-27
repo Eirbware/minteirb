@@ -1,7 +1,7 @@
 services:
   main: 
     image: ubuntu:noble
-    command: bash /app/iso-modifier.sh
+    command: bash /app/iso_modifier.sh
     working_dir: /app
     privileged: true # Un peu sus mais tkt
     volumes: 
@@ -9,8 +9,8 @@ services:
         source: ./iso
         target: /app/iso
       - type: bind
-        source: ./iso-modifier.sh
-        target: /app/iso-modifier.sh
+        source: ./iso_modifier.sh
+        target: /app/iso_modifier.sh
       - type: bind
         source: ./autoinstall.yaml
         target: /app/autoinstall.yaml
@@ -18,14 +18,11 @@ services:
         source: ./scripts
         target: /app/scripts
       - type: bind
-        source: ./gnome-files
-        target: /app/gnome-files
-      - type: bind
         source: ./assets
         target: /app/assets
       - type: bind
-        source: ./desktop-files
-        target: /app/desktop-files
+        source: ./desktop_files
+        target: /app/desktop_files
       - type: bind
-        source: ./new-iso
-        target: /app/new-iso
+        source: ./new_iso
+        target: /app/new_iso

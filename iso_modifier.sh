@@ -6,7 +6,7 @@ PACKAGES_TO_INSTALL="vim neovim emacs git valgrind gdb wireshark sl gcc tmux feh
 set -x
 set -e
 
-# Uses ubuntu autoinstall
+# Uses ubuntu autoinstall (I hope so much that this things exists for Mint, otherwise I don't have any idea of how to do)
 
 ### Update and install necesary packages
 apt-get update
@@ -22,10 +22,10 @@ echo -e 'Types: deb\nURIs: https://download.vscodium.com/debs\nSuites: vscodium\
 apt-get update && apt-get install -y codium
 
 ### Set scripts and eirb.fr shortcut as executable
-chmod +x scripts/* desktop-files/eirb.fr.desktop
+chmod +x scripts/* desktop_files/eirb.fr.desktop
 
 ### Creating tmp dir to work in
-TMP_DIR=/iso-modif
+TMP_DIR=/iso_modif
 mkdir -p $TMP_DIR
 
 # Extracting iso
@@ -36,17 +36,16 @@ xorriso -osirrox on -indev $ISO -extract / $TMP_DIR &> /dev/null
 cp autoinstall.yaml $TMP_DIR
 cp scripts $TMP_DIR -r
 cp assets $TMP_DIR -r
-cp desktop-files $TMP_DIR -r
-cp gnome-files $TMP_DIR -r
+cp desktop_files $TMP_DIR -r
 
-### Copying dbus-x11 in the iso (necessary to make gnome modification work)
+### Copying dbus-x11 in the iso (necessary to make cinnamon modification work)
 dpkg-repack $PREINSTALLED_PACKAGES
-mkdir $TMP_DIR/preinstalled-packages
-cp *.deb $TMP_DIR/preinstalled-packages
+mkdir $TMP_DIR/preinstalled_packages
+cp *.deb $TMP_DIR/preinstalled_packages
 
 ### Put packages to install in /packages-to-install to be able to be installed offline
-mkdir $TMP_DIR/packages-to-install
-cd $TMP_DIR/packages-to-install
+mkdir $TMP_DIR/packages_to_install
+cd $TMP_DIR/packages_to_install
 for package in $PACKAGES_TO_INSTALL
 do
   dpkg-repack $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances $package | grep "^\w") $package
@@ -78,7 +77,7 @@ MBR_FILE=/mbr_copy.bin
 dd if=$ISO bs=1 count=432 of=$MBR_FILE
 
 ### Repackaging iso
-NEW_ISO_PATH=/app/new-iso/$(ls /app/iso | head -n 1 | sed 's/ubuntu/minteirb/')
+NEW_ISO_PATH=/app/new_iso/$(ls /app/iso | head -n 1 | sed 's/linuxmint/minteirb/')
 xorriso -as mkisofs -r -V "minteirb" \
   -o $NEW_ISO_PATH\
   -J -l -c boot.catalog\

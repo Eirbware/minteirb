@@ -1,6 +1,0 @@
-# dconf path 
-[org/gnome/desktop/background]
-
-# dconf config
-picture-uri="file:///usr/share/backgrounds/minteirb-background.png"
-picture-uri-dark="file:///usr/share/backgrounds/minteirb-background.png"
