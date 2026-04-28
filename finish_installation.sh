@@ -1,9 +1,11 @@
 #!/bin/bash
 EDITOR_PKGS="vim neovim emacs micro codium"
-COMPILER_PKGS="gcc clang gfortran make nodejs npm clang-format clang-tidy"
-DEVTOOLS_PKGS="git gdb valgrind gnuplot wireshark sl tmux feh"
-TOOLS_PKGS="curl wget gpg"
-PKGS="$EDITOR_PKGS $COMPILER_PKGS $DEVTOOLS_PKGS $TOOLS_PKGS"
+COMPILER_PKGS="gcc g++ clang gfortran make nodejs npm clang-format clang-tidy yasm"
+PYTHON_PKGS="python-is-python3 python3-pip python3-numpy python3-matplotlib"
+DEVTOOLS_PKGS="gdb valgrind gnuplot wireshark sl tmux feh"
+TOOLS_PKGS="curl wget gpg git" # these are needed for other commands, so we should install them first
+
+PKGS="$EDITOR_PKGS $COMPILER_PKGS $DEVTOOLS_PKGS $PYTHON_PKGS"
 
 CWD=$(pwd)
 
@@ -12,6 +14,7 @@ set -e
 echo "╭───────────────────────────╮"
 echo "│ Setting Minteirb theme... │"
 echo "╰───────────────────────────╯"
+
 ### Adding minteirb theme and background files
 sudo cp $CWD/assets/minteirb_theme /usr/share/plymouth/themes/minteirb -r
 sudo cp $CWD/assets/minteirb_wallpaper.png /usr/share/backgrounds
@@ -38,16 +41,31 @@ sudo systemctl daemon-reload
 sudo systemctl enable minteirb_grub.service
 sudo /opt/minteirb_grub.sh
 
-
 echo "╭───────────────────────╮"
 echo "│ Adding cheatsheets... │"
 echo "╰───────────────────────╯"
 
-### Adding default desktop files
 sudo mkdir -p /etc/skel/Desktop
 sudo cp -r $CWD/desktop_files/* /etc/skel/Desktop
 sudo chmod +x /etc/skel/Desktop/eirb.fr.desktop
 
+echo "╭───────────────────────────────╮"
+echo "│ Installing important utils... │"
+echo "╰───────────────────────────────╯"
+
+sudo apt-get update
+sudo apt-get install -y $TOOLS_PKGS
+
+echo "╭───────────────────────────────╮"
+echo "│ Adding some configurations... │"
+echo "╰───────────────────────────────╯"
+
+# nvim kickstart
+git clone https://github.com/nvim-lua/kickstart.nvim.git "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
+
+# doom emacs
+git clone --depth 1 https://github.com/doomemacs/doomemacs "${XDG_CONFIG_HOME:-$HOME/.config}"/emacs
+"${XDG_CONFIG_HOME:-$HOME/.config}"/emacs/bin/doom install
 
 echo "╭────────────────────────╮"
 echo "│ Installing packages... │"
