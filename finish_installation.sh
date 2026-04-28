@@ -1,6 +1,6 @@
 #!/bin/bash
-EDITOR_PKGS="vim neovim emacs micro codium"
-COMPILER_PKGS="gcc g++ clang gfortran make nodejs npm clang-format clang-tidy yasm"
+EDITOR_PKGS="vim emacs micro codium" # we will install neovim separately due to the VERY old version that is available on the Mint repos
+COMPILER_PKGS="gcc g++ clang gfortran make nodejs npm clang-format clang-tidy yasm texlive"
 PYTHON_PKGS="python-is-python3 python3-pip python3-numpy python3-matplotlib"
 DEVTOOLS_PKGS="gdb valgrind gnuplot sl tmux feh"
 TOOLS_PKGS="curl wget gpg git" # these are needed for other commands, so we should install them first
@@ -25,6 +25,8 @@ gsettings set org.cinnamon.desktop.background picture-uri file:///usr/share/back
 gsettings set org.cinnamon.desktop.interface gtk-theme 'Mint-Y-Dark-Sand'
 gsettings set org.cinnamon.desktop.interface icon-theme 'Mint-Y-Sand'
 gsettings set org.cinnamon.desktop.interface font-name 'Noto Sans 10'
+gsettings set org.nemo.desktop font 'Noto Sans 10'
+gsettings set org.cinnamon.desktop.interface document-font-name 'Noto Sans 10'
 gsettings set org.cinnamon.desktop.wm.preferences theme 'Mint-Y'
 gsettings set org.cinnamon.desktop.wm.preferences titlebar-uses-system-font true
 gsettings set org.cinnamon.desktop.wm.preferences audible-bell false
@@ -56,16 +58,6 @@ echo "╰───────────────────────�
 sudo apt-get update
 sudo apt-get install -y $TOOLS_PKGS
 
-echo "╭───────────────────────────────╮"
-echo "│ Adding some configurations... │"
-echo "╰───────────────────────────────╯"
-
-# nvim kickstart
-git clone https://github.com/nvim-lua/kickstart.nvim.git "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
-
-# doom emacs
-git clone --depth 1 https://github.com/doomemacs/doomemacs "${XDG_CONFIG_HOME:-$HOME/.config}"/emacs
-
 echo "╭────────────────────────╮"
 echo "│ Installing packages... │"
 echo "╰────────────────────────╯"
@@ -80,5 +72,36 @@ echo -e 'Types: deb\nURIs: https://download.vscodium.com/debs\nSuites: vscodium\
 
 sudo apt-get update
 sudo apt-get install -y $PKGS
+
+echo "╭───────────────────────────────╮"
+echo "│ Adding some configurations... │"
+echo "╰───────────────────────────────╯"
+
+# doom emacs
+git clone --depth 1 https://github.com/doomemacs/doomemacs $HOME/.config/emacs
 # installing doom emacs packages
-"${XDG_CONFIG_HOME:-$HOME/.config}"/emacs/bin/doom install
+echo "y" | "${XDG_CONFIG_HOME:-$HOME/.config}"/emacs/bin/doom install&
+
+# for neovim now. I know, that's a lot of stuff but you know "When it's ready" doesn't mean the same thing for Debian and for Neovim
+archi=$(uname -m)
+cd /usr/local/bin/
+
+sudo wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux-$archi.tar.gz # download latest nvim releases for the computer's architecture
+sudo tar xzf nvim-linux-$archi.tar.gz # extract archive
+ln -rs nvim-linux-$archi/bin/nvim nvim # create a link for nvim to be in the Path
+
+# nvim MiniMax
+# (I know, kickstart is good, but I do not want to waste my time installing the f*****g 1.5GB of tree-sitter-cli when setting up a new machine
+# MiniMax does not complains about this missing tree-sitter-cli)
+git clone --filter=blob:none https://github.com/nvim-mini/MiniMax $HOME/.MiniMax
+nvim -l $HOME/.MiniMax/setup.lua # setup MiniMax
+
+sudo rm nvim-linux-$archi.tar.gz # remove archive (we do not need it anymore)
+
+# install a nerd font (JetBrains Mono NF) / otherwise, nvim looks buggy because of glyphs and icons
+cd /tmp
+wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.tar.xz
+sudo mkdir -p /usr/local/share/fonts/JetBrainsMono
+sudo tar xJf JetBrainsMono.tar.xz -C /usr/local/share/fonts/JetBrainsMono # extract archive
+sudo fc-cache -f # rebuild font cache
+gsettings set org.gnome.desktop.interface monospace-font-name 'JetBrainsMono Nerd Font 10' # set as default monospace font
