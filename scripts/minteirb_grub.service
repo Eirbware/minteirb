@@ -4,7 +4,7 @@ Description=Changes the name of the os in grub
 [Service]
 Type=oneshot
 RemainAfterExit=true
-ExecStop=/opt/change_os_name.sh
+ExecStop=/opt/minteirb_grub.sh
 
 [Install]
 WantedBy=multi-user.target
