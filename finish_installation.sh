@@ -3,7 +3,7 @@ EDITOR_PKGS="vim neovim emacs micro codium"
 COMPILER_PKGS="gcc clang gfortran make nodejs npm clang-format clang-tidy"
 DEVTOOLS_PKGS="git gdb valgrind gnuplot wireshark sl tmux feh"
 TOOLS_PKGS="curl wget gpg"
-PKGS= $EDITOR_PKGS $COMPILER_PKGS $DEVTOOLS_PKGS $TOOLS_PKGS
+PKGS="$EDITOR_PKGS $COMPILER_PKGS $DEVTOOLS_PKGS $TOOLS_PKGS"
 
 CWD=$(pwd)
 
