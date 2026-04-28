@@ -2,7 +2,7 @@
 EDITOR_PKGS="vim neovim emacs micro codium"
 COMPILER_PKGS="gcc g++ clang gfortran make nodejs npm clang-format clang-tidy yasm"
 PYTHON_PKGS="python-is-python3 python3-pip python3-numpy python3-matplotlib"
-DEVTOOLS_PKGS="gdb valgrind gnuplot wireshark sl tmux feh"
+DEVTOOLS_PKGS="gdb valgrind gnuplot sl tmux feh"
 TOOLS_PKGS="curl wget gpg git" # these are needed for other commands, so we should install them first
 
 PKGS="$EDITOR_PKGS $COMPILER_PKGS $DEVTOOLS_PKGS $PYTHON_PKGS"
@@ -65,7 +65,6 @@ git clone https://github.com/nvim-lua/kickstart.nvim.git "${XDG_CONFIG_HOME:-$HO
 
 # doom emacs
 git clone --depth 1 https://github.com/doomemacs/doomemacs "${XDG_CONFIG_HOME:-$HOME/.config}"/emacs
-"${XDG_CONFIG_HOME:-$HOME/.config}"/emacs/bin/doom install
 
 echo "╭────────────────────────╮"
 echo "│ Installing packages... │"
@@ -81,3 +80,5 @@ echo -e 'Types: deb\nURIs: https://download.vscodium.com/debs\nSuites: vscodium\
 
 sudo apt-get update
 sudo apt-get install -y $PKGS
+# installing doom emacs packages
+"${XDG_CONFIG_HOME:-$HOME/.config}"/emacs/bin/doom install
