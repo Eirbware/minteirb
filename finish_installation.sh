@@ -1,8 +1,8 @@
 #!/bin/bash
-EDITOR_PKGS="vim emacs micro codium" # we will install neovim separately due to the VERY old version that is available on the Mint repos
+EDITOR_PKGS="vim emacs codium" # we will install neovim separately due to the VERY old version that is available on the Mint repos
 COMPILER_PKGS="gcc g++ clang gfortran make nodejs npm clang-format clang-tidy yasm texlive"
 PYTHON_PKGS="python-is-python3 python3-pip python3-numpy python3-matplotlib"
-DEVTOOLS_PKGS="gdb valgrind gnuplot sl tmux feh"
+DEVTOOLS_PKGS="gdb valgrind gnuplot sl"
 TOOLS_PKGS="curl wget gpg git" # these are needed for other commands, so we should install them first
 
 PKGS="$EDITOR_PKGS $COMPILER_PKGS $DEVTOOLS_PKGS $PYTHON_PKGS"
@@ -11,9 +11,11 @@ CWD=$(pwd)
 
 set -e
 
+echo -e "\033[33m"
 echo "╭───────────────────────────╮"
 echo "│ Setting Minteirb theme... │"
 echo "╰───────────────────────────╯"
+echo -e "\033[0m"
 
 ### Adding minteirb theme and background files
 sudo cp $CWD/assets/minteirb_theme /usr/share/plymouth/themes/minteirb -r
@@ -43,24 +45,30 @@ sudo systemctl daemon-reload
 sudo systemctl enable minteirb_grub.service
 sudo /opt/minteirb_grub.sh
 
+echo -e "\033[33m"
 echo "╭───────────────────────╮"
 echo "│ Adding cheatsheets... │"
 echo "╰───────────────────────╯"
+echo -e "\033[0m"
 
 sudo mkdir -p /etc/skel/Desktop
 sudo cp -r $CWD/desktop_files/* /etc/skel/Desktop
 sudo chmod +x /etc/skel/Desktop/eirb.fr.desktop
 
+echo -e "\033[33m"
 echo "╭───────────────────────────────╮"
 echo "│ Installing important utils... │"
 echo "╰───────────────────────────────╯"
+echo -e "\033[0m"
 
 sudo apt-get update
 sudo apt-get install -y $TOOLS_PKGS
 
+echo -e "\033[33m"
 echo "╭────────────────────────╮"
 echo "│ Installing packages... │"
 echo "╰────────────────────────╯"
+echo -e "\033[0m"
 
 ### Add codium in sources (https://vscodium.com/#install)
 wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg \
@@ -73,14 +81,16 @@ echo -e 'Types: deb\nURIs: https://download.vscodium.com/debs\nSuites: vscodium\
 sudo apt-get update
 sudo apt-get install -y $PKGS
 
+echo -e "\033[33m"
 echo "╭───────────────────────────────╮"
 echo "│ Adding some configurations... │"
 echo "╰───────────────────────────────╯"
+echo -e "\033[0m"
 
 # doom emacs
 git clone --depth 1 https://github.com/doomemacs/doomemacs $HOME/.config/emacs
 # installing doom emacs packages
-echo "y" | "${XDG_CONFIG_HOME:-$HOME/.config}"/emacs/bin/doom install&
+(yes | "${XDG_CONFIG_HOME:-$HOME/.config}"/emacs/bin/doom install)&
 
 # for neovim now. I know, that's a lot of stuff but you know "When it's ready" doesn't mean the same thing for Debian and for Neovim
 archi=$(uname -m)
