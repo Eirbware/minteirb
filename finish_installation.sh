@@ -87,18 +87,13 @@ echo "│ Adding some configurations... │"
 echo "╰───────────────────────────────╯"
 echo -e "\033[0m"
 
-# doom emacs
-git clone --depth 1 https://github.com/doomemacs/doomemacs $HOME/.config/emacs
-# installing doom emacs packages
-(yes | "${XDG_CONFIG_HOME:-$HOME/.config}"/emacs/bin/doom install)&
-
 # for neovim now. I know, that's a lot of stuff but you know "When it's ready" doesn't mean the same thing for Debian and for Neovim
 archi=$(uname -m)
 cd /usr/local/bin/
 
 sudo wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux-$archi.tar.gz # download latest nvim releases for the computer's architecture
 sudo tar xzf nvim-linux-$archi.tar.gz # extract archive
-ln -rs nvim-linux-$archi/bin/nvim nvim # create a link for nvim to be in the Path
+sudo ln -rs nvim-linux-$archi/bin/nvim nvim # create a link for nvim to be in the Path
 
 # nvim MiniMax
 # (I know, kickstart is good, but I do not want to waste my time installing the f*****g 1.5GB of tree-sitter-cli when setting up a new machine
@@ -114,4 +109,20 @@ wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsM
 sudo mkdir -p /usr/local/share/fonts/JetBrainsMono
 sudo tar xJf JetBrainsMono.tar.xz -C /usr/local/share/fonts/JetBrainsMono # extract archive
 sudo fc-cache -f # rebuild font cache
+
+
+echo -e "\033[32m"
+echo "╭───────────────────────────╮"
+echo "│ Installation complete! ✅ │"
+echo "╰───────────────────────────╯"
+echo -e "\033[0m"
+
+echo "\tneovim will be opened in a new window to achieve it's installation"
+echo "\tthis terminal will close automatically: press ENTER."
+read
+
+# because changing monospace font it's quite buggy, we need to close and then reopen a terminal to make the font displaying correctly
 gsettings set org.gnome.desktop.interface monospace-font-name 'JetBrainsMono Nerd Font 10' # set as default monospace font
+(gnome-terminal -- nvim)& disown # open a terminal to install nvim plugins
+sleep 0.2 # wait a moment
+(kill -9 $PPID) # close the parent terminal
