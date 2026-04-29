@@ -28,7 +28,7 @@ gsettings set org.cinnamon.desktop.interface gtk-theme 'Mint-Y-Dark-Sand'
 gsettings set org.cinnamon.desktop.interface icon-theme 'Mint-Y-Sand'
 gsettings set org.cinnamon.desktop.interface font-name 'Noto Sans 10'
 gsettings set org.nemo.desktop font 'Noto Sans 10'
-gsettings set org.cinnamon.desktop.interface document-font-name 'Noto Sans 10'
+gsettings set org.gnome.desktop.interface document-font-name 'Noto Sans 10'
 gsettings set org.cinnamon.desktop.wm.preferences theme 'Mint-Y'
 gsettings set org.cinnamon.desktop.wm.preferences titlebar-uses-system-font true
 gsettings set org.cinnamon.desktop.wm.preferences audible-bell false
@@ -79,7 +79,7 @@ echo -e 'Types: deb\nURIs: https://download.vscodium.com/debs\nSuites: vscodium\
 | sudo tee /etc/apt/sources.list.d/vscodium.sources
 
 sudo apt-get update
-sudo apt-get install -y $PKGS
+sudo DEBIAN_FRONTED=noninteractive apt-get install -y $PKGS
 
 echo -e "\033[33m"
 echo "╭───────────────────────────────╮"
