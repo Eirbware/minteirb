@@ -2,8 +2,8 @@
 EDITOR_PKGS="vim emacs codium" # we will install neovim separately due to the VERY old version that is available on the Mint repos
 COMPILER_PKGS="gcc g++ clang gfortran make nodejs npm clang-format clang-tidy yasm texlive"
 PYTHON_PKGS="python-is-python3 python3-pip python3-numpy python3-matplotlib"
-DEVTOOLS_PKGS="gdb valgrind gnuplot sl"
-TOOLS_PKGS="curl wget gpg git" # these are needed for other commands, so we should install them first
+DEVTOOLS_PKGS="gdb valgrind gnuplot sl wireshark"
+TOOLS_PKGS="wget gpg git" # these are needed for other commands, so we should install them first
 
 PKGS="$EDITOR_PKGS $COMPILER_PKGS $DEVTOOLS_PKGS $PYTHON_PKGS"
 
@@ -18,7 +18,7 @@ echo "╰───────────────────────�
 echo -e "\033[0m"
 
 ### Adding minteirb theme and background files
-sudo cp $CWD/assets/minteirb_theme /usr/share/plymouth/themes/minteirb -r
+sudo cp -r $CWD/assets/minteirb_theme /usr/share/plymouth/themes/minteirb
 sudo cp $CWD/assets/minteirb_wallpaper.png /usr/share/backgrounds
 sudo cp $CWD/assets/ubuntu-logo.png /usr/share/plymouth/ubuntu-logo.png
 
@@ -81,19 +81,36 @@ echo -e 'Types: deb\nURIs: https://download.vscodium.com/debs\nSuites: vscodium\
 sudo apt-get update
 sudo DEBIAN_FRONTED=noninteractive apt-get install -y $PKGS
 
+cd /usr/local/bin/
+archi=$(uname -m) # supports only aarch64 and x86_64
+
+# Install Typst
+typst_folder="typst-$archi-unknown-linux-musl"
+sudo wget https://github.com/typst/typst/releases/download/v0.14.2/$typst_folder.tar.xz
+sudo tar xJf $typst_folder.tar.xz # extract archive
+sudo chmod +x $typst_folder/typst # make file executable
+sudo ln -rs $typst_folder/typst typst # create a link for nvim to be in the Path
+sudo rm $typst_folder.tar.xz
+
+# for neovim now. I know, that's a lot of stuff but you know "When it's ready" doesn't mean the same thing for Debian and for Neovim
+nvim_folder="nvim-linux-$archi"
+sudo wget https://github.com/neovim/neovim/releases/download/stable/$nvim_folder.tar.gz # download latest nvim releases for the computer's architecture
+sudo tar xzf $nvim_folder.tar.gz # extract archive
+sudo chmod +x $nvim_folder/bin/nvim # make file executable
+sudo ln -rs $nvim_folder/bin/nvim nvim # create a link for nvim to be in the Path
+sudo rm $nvim_folder.tar.gz # remove archive (we do not need it anymore)
+
 echo -e "\033[33m"
 echo "╭───────────────────────────────╮"
 echo "│ Adding some configurations... │"
 echo "╰───────────────────────────────╯"
 echo -e "\033[0m"
 
-# for neovim now. I know, that's a lot of stuff but you know "When it's ready" doesn't mean the same thing for Debian and for Neovim
-archi=$(uname -m)
-cd /usr/local/bin/
+# for vim
+cp $CWD/assets/.vimrc $HOME/.vimrc
 
-sudo wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux-$archi.tar.gz # download latest nvim releases for the computer's architecture
-sudo tar xzf nvim-linux-$archi.tar.gz # extract archive
-sudo ln -rs nvim-linux-$archi/bin/nvim nvim # create a link for nvim to be in the Path
+# for emacs (actually, that's just a dark theme, perhaps we will have a better config later...)
+cp $CWD/assets/.emacs $HOME/.emacs
 
 # nvim MiniMax
 # (I know, kickstart is good, but I do not want to waste my time installing the f*****g 1.5GB of tree-sitter-cli when setting up a new machine
@@ -101,15 +118,12 @@ sudo ln -rs nvim-linux-$archi/bin/nvim nvim # create a link for nvim to be in th
 git clone --filter=blob:none https://github.com/nvim-mini/MiniMax $HOME/.MiniMax
 nvim -l $HOME/.MiniMax/setup.lua # setup MiniMax
 
-sudo rm nvim-linux-$archi.tar.gz # remove archive (we do not need it anymore)
-
 # install a nerd font (JetBrains Mono NF) / otherwise, nvim looks buggy because of glyphs and icons
 cd /tmp
 wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.tar.xz
 sudo mkdir -p /usr/local/share/fonts/JetBrainsMono
 sudo tar xJf JetBrainsMono.tar.xz -C /usr/local/share/fonts/JetBrainsMono # extract archive
 sudo fc-cache -f # rebuild font cache
-
 
 echo -e "\033[32m"
 echo "╭───────────────────────────╮"
