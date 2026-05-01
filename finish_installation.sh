@@ -21,6 +21,8 @@ echo "╰───────────────────────�
 echo -e "\033[0m"
 
 ### Adding minteirb theme and background files
+sudo rm -rf /usr/local/share/minteirb # if script was previously run, deleting it allows to update files
+sudo cp -r $CWD/assets /usr/local/share/minteirb
 sudo cp -r $CWD/assets/minteirb_theme /usr/share/plymouth/themes/minteirb
 sudo cp $CWD/assets/minteirb_wallpaper.png /usr/share/backgrounds
 sudo cp $CWD/assets/ubuntu-logo.png /usr/share/plymouth/ubuntu-logo.png

@@ -1,4 +1,5 @@
 [Desktop Entry]
 Type=Application
-Name=Eirb website
+Name=eirb.fr
+Icon=/usr/local/share/minteirb/eirbware_logo.png
 Exec=firefox https://eirb.fr
