@@ -34,7 +34,7 @@ gsettings set org.cinnamon.desktop.wm.preferences titlebar-uses-system-font true
 gsettings set org.cinnamon.desktop.wm.preferences audible-bell false
 
 ### Changing default plymouth theme to minteirb to change the boot image
-sudo ln -sf /usr/share/plymouth/themes/minteirb/minteirb.plymouth /etc/alternatives/default.plymouth
+sudo ln -srf /usr/share/plymouth/themes/minteirb/minteirb.plymouth /etc/alternatives/default.plymouth
 sudo update-initramfs -u
 
 ### Setting up the systemd service to rename the os in grub and other grub custom options
@@ -89,7 +89,7 @@ typst_folder="typst-$archi-unknown-linux-musl"
 sudo wget https://github.com/typst/typst/releases/download/v0.14.2/$typst_folder.tar.xz
 sudo tar xJf $typst_folder.tar.xz # extract archive
 sudo chmod +x $typst_folder/typst # make file executable
-sudo ln -rs $typst_folder/typst typst # create a link for nvim to be in the Path
+sudo ln -rfs $typst_folder/typst typst # create a link for nvim to be in the Path
 sudo rm $typst_folder.tar.xz
 
 # for neovim now. I know, that's a lot of stuff but you know "When it's ready" doesn't mean the same thing for Debian and for Neovim
@@ -97,7 +97,7 @@ nvim_folder="nvim-linux-$archi"
 sudo wget https://github.com/neovim/neovim/releases/download/stable/$nvim_folder.tar.gz # download latest nvim releases for the computer's architecture
 sudo tar xzf $nvim_folder.tar.gz # extract archive
 sudo chmod +x $nvim_folder/bin/nvim # make file executable
-sudo ln -rs $nvim_folder/bin/nvim nvim # create a link for nvim to be in the Path
+sudo ln -rfs $nvim_folder/bin/nvim nvim # create a link for nvim to be in the Path
 sudo rm $nvim_folder.tar.gz # remove archive (we do not need it anymore)
 
 echo -e "\033[33m"
@@ -131,8 +131,8 @@ echo "│ Installation complete! ✅ │"
 echo "╰───────────────────────────╯"
 echo -e "\033[0m"
 
-echo "\tneovim will be opened in a new window to achieve it's installation"
-echo "\tthis terminal will close automatically: press ENTER."
+echo -e "\tneovim will be opened in a new window to achieve it's installation"
+echo -e "\tthis terminal will close automatically: press ENTER."
 read
 
 # because changing monospace font it's quite buggy, we need to close and then reopen a terminal to make the font displaying correctly
