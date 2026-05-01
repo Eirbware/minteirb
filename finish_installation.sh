@@ -54,9 +54,17 @@ echo "│ Adding cheatsheets... │"
 echo "╰───────────────────────╯"
 echo -e "\033[0m"
 
-sudo mkdir -p /etc/skel/Desktop
-sudo cp -r $CWD/desktop_files/* /etc/skel/Desktop
-sudo chmod +x /etc/skel/Desktop/eirb.fr.desktop
+if [[ -e "$HOME/Desktop" ]]; then
+    sudo cp -r $CWD/desktop_files/* $HOME/Desktop
+    sudo chmod +x $HOME/Desktop/eirb.fr.desktop
+elif [[ -e "$HOME/Bureau" ]]; then
+    sudo cp -r $CWD/desktop_files/* $HOME/Bureau
+    sudo chmod +x $HOME/Bureau/eirb.fr.desktop
+else
+    sudo mkdir -p $HOME/Desktop
+    sudo cp -r $CWD/desktop_files/* $HOME/Desktop
+    sudo chmod +x $HOME/Desktop/eirb.fr.desktop
+fi
 
 echo -e "\033[33m"
 echo "╭───────────────────────────────╮"
