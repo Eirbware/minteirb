@@ -138,5 +138,5 @@ read
 # because changing monospace font it's quite buggy, we need to close and then reopen a terminal to make the font displaying correctly
 gsettings set org.gnome.desktop.interface monospace-font-name 'JetBrainsMono Nerd Font 10' # set as default monospace font
 (gnome-terminal -- nvim)& disown # open a terminal to install nvim plugins
-sleep 0.2 # wait a moment
+sleep 0.5 # wait a moment
 (kill -9 $PPID) # close the parent terminal
