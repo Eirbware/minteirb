@@ -1,12 +1,11 @@
 [Unit]
 Description=Changes the name of the os in grub
-Before=shutdown.target
 
 [Service]
 Type=oneshot
 RemainAfterExit=true
-ExecStart=/opt/minteirb_grub.sh
-TimeoutStartSec=0
+ExecStart=/bin/true
+ExecStop=/opt/minteirb_grub.sh
 
 [Install]
-WantedBy=shutdown.target
+WantedBy=multi-user.target

@@ -37,6 +37,9 @@ gsettings set org.cinnamon.desktop.wm.preferences audible-bell false
 sudo ln -srf /usr/share/plymouth/themes/minteirb/minteirb.plymouth /etc/alternatives/default.plymouth
 sudo update-initramfs -u
 
+### Add a nice grub theme to a nicer one
+sudo tar -xzf $CWD/assets/darkmatter_grub.tar.gz -C /boot/grub/themes/
+
 ### Setting up the systemd service to rename the os in grub and other grub custom options
 sudo cp $CWD/scripts/minteirb_grub.sh /opt/minteirb_grub.sh
 sudo chmod +x /opt/minteirb_grub.sh
