@@ -9,6 +9,9 @@ PKGS="$EDITOR_PKGS $COMPILER_PKGS $DEVTOOLS_PKGS $PYTHON_PKGS"
 
 CWD=$(pwd)
 
+ID=1000 #Id of the first (and probably sole) user
+USER=$(id -nu $ID)
+
 set -e
 
 echo -e "\033[33m"
@@ -57,13 +60,16 @@ echo -e "\033[0m"
 
 if [[ -e "$HOME/Desktop" ]]; then
     sudo cp -r $CWD/desktop_files/* $HOME/Desktop
+    sudo chown --recursive $USER $HOME/Desktop
     sudo chmod +x $HOME/Desktop/eirb.fr.desktop
 elif [[ -e "$HOME/Bureau" ]]; then
     sudo cp -r $CWD/desktop_files/* $HOME/Bureau
+    sudo chown --recursive $USER $HOME/Bureau
     sudo chmod +x $HOME/Bureau/eirb.fr.desktop
 else
     sudo mkdir -p $HOME/Desktop
     sudo cp -r $CWD/desktop_files/* $HOME/Desktop
+    sudo chown --recursive $USER $HOME/Desktop
     sudo chmod +x $HOME/Desktop/eirb.fr.desktop
 fi
 
