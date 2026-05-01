@@ -38,6 +38,7 @@ sudo ln -srf /usr/share/plymouth/themes/minteirb/minteirb.plymouth /etc/alternat
 sudo update-initramfs -u
 
 ### Add a nice grub theme to a nicer one
+sudo mkdir -p /boot/grub/themes
 sudo tar -xzf $CWD/assets/darkmatter_grub.tar.gz -C /boot/grub/themes/
 
 ### Setting up the systemd service to rename the os in grub and other grub custom options
