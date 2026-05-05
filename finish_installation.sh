@@ -57,7 +57,7 @@ sudo sed -i -e 's/^GRUB_TIMEOUT=0$/GRUB_TIMEOUT=5/' /etc/default/grub || true
 ### set a nice grub theme
 if ! sudo grep -q -E '^GRUB_THEME=.*$' /etc/default/grub
 then
-    echo 'GRUB_THEME="/boot/grub/themes/darkmatter/theme.txt"' | sudo tee /etc/default/grub
+    echo 'GRUB_THEME="/boot/grub/themes/darkmatter/theme.txt"' | sudo tee -a /etc/default/grub
 else
     sudo sed -i -E -e 's/^GRUB_THEME=.*$/GRUB_THEME="\/boot\/grub\/themes\/darkmatter\/theme.txt"' /etc/default/grub
 fi
