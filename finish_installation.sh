@@ -34,8 +34,8 @@ sudo cp $CWD/assets/wallpapers/* /usr/share/wallpapers/Minteirb
 sudo cp $CWD/assets/ubuntu-logo.png /usr/share/plymouth/ubuntu-logo.png
 
 ### Set cinnamon theme
-chmod u+x $$CWD/scripts/cinnamon_theme.sh
-./$CWD/scripts/cinnamon_theme.sh
+chmod u+x $CWD/scripts/cinnamon_theme.sh
+$CWD/scripts/cinnamon_theme.sh
 
 ## Set grub theme
 
@@ -48,21 +48,22 @@ sudo mkdir -p /boot/grub/themes
 sudo tar -xzf $CWD/assets/darkmatter_grub.tar.gz -C /boot/grub/themes/
 
 ### Setting grub defaults
+### || true allows the script to run multiple times
 ### changing the name in grub defaults
-sed -i -e 's/Ubuntu/Minteirb/g' /etc/default/grub
+sudo sed -i -e 's/Ubuntu/Minteirb/g' /etc/default/grub || true
 ### set timeout before boot to 5 seconds
-sed -i -e 's/^GRUB_TIMEOUT_STYLE=hidden$/# GRUB_TIMEOUT_STYLE=hidden/' /etc/default/grub
-sed -i -e 's/^GRUB_TIMEOUT=0$/GRUB_TIMEOUT=5/' /etc/default/grub
+sudo sed -i -e 's/^GRUB_TIMEOUT_STYLE=hidden$/# GRUB_TIMEOUT_STYLE=hidden/' /etc/default/grub || true
+sudo sed -i -e 's/^GRUB_TIMEOUT=0$/GRUB_TIMEOUT=5/' /etc/default/grub || true
 ### set a nice grub theme
-if ! grep -q -E '^GRUB_THEME=.*$' /etc/default/grub
+if ! sudo grep -q -E '^GRUB_THEME=.*$' /etc/default/grub
 then
-    echo 'GRUB_THEME="/boot/grub/themes/darkmatter/theme.txt"' >> /etc/default/grub
+    echo 'GRUB_THEME="/boot/grub/themes/darkmatter/theme.txt"' | sudo tee /etc/default/grub
 else
-    sed -i -E -e 's/^GRUB_THEME=.*$/GRUB_THEME="\/boot\/grub\/themes\/darkmatter\/theme.txt"' /etc/default/grub
+    sudo sed -i -E -e 's/^GRUB_THEME=.*$/GRUB_THEME="\/boot\/grub\/themes\/darkmatter\/theme.txt"' /etc/default/grub
 fi
 
 ### apply grub config
-update-grub
+sudo update-grub
 
 
 ### Setting up the systemd service to rename the os in grub and other grub custom options
@@ -99,6 +100,8 @@ echo "╭───────────────────────�
 echo "│ Installing important utils... │"
 echo "╰───────────────────────────────╯"
 echo -e "\033[0m"
+
+# TODO: change mirror repo
 
 sudo apt-get update
 sudo apt-get install -y $TOOLS_PKGS
@@ -160,10 +163,10 @@ nvim -l $HOME/.MiniMax/setup.lua # setup MiniMax
 
 # install a nerd font (JetBrains Mono NF) / otherwise, nvim looks buggy because of glyphs and icons
 cd /tmp
-wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMonoNF.tar.xz
-sudo rm -rf /usr/local/share/fonts/JetBrainsMonoNF
-sudo mkdir -p /usr/local/share/fonts/JetBrainsMonoNF
-sudo tar xJf JetBrainsMonoNF.tar.xz -C /usr/local/share/fonts/JetBrainsMonoNF # extract archive
+wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.tar.xz
+sudo rm -rf /usr/local/share/fonts/JetBrainsMono
+sudo mkdir -p /usr/local/share/fonts/JetBrainsMono
+sudo tar xJf JetBrainsMono.tar.xz -C /usr/local/share/fonts/JetBrainsMono # extract archive
 sudo fc-cache -f # rebuild font cache
 
 echo -e "\033[32m"
