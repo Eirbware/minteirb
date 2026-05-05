@@ -20,23 +20,24 @@ echo "│ Setting Minteirb theme... │"
 echo "╰───────────────────────────╯"
 echo -e "\033[0m"
 
+## Copy files
 ### Adding minteirb theme and background files
-sudo rm -rf /usr/local/share/minteirb # if script was previously run, deleting it allows to update files
+# if script was previously run, deleting the directories allows to update files
+sudo rm -rf /usr/local/share/minteirb
+sudo rm -rf /usr/share/plymouth/themes/minteirb
+
 sudo cp -r $CWD/assets /usr/local/share/minteirb
 sudo cp -r $CWD/assets/minteirb_theme /usr/share/plymouth/themes/minteirb
-sudo cp $CWD/assets/minteirb_wallpaper.png /usr/share/backgrounds
+sudo cp $CWD/assets/wallpapers/minteirb.png /usr/share/backgrounds
+sudo mkdir -p /usr/share/wallpapers/Minteirb
+sudo cp $CWD/assets/wallpapers/* /usr/share/wallpapers/Minteirb
 sudo cp $CWD/assets/ubuntu-logo.png /usr/share/plymouth/ubuntu-logo.png
 
-### Changing cinnamon default background and theme
-gsettings set org.cinnamon.desktop.background picture-uri file:///usr/share/backgrounds/minteirb_wallpaper.png
-gsettings set org.cinnamon.desktop.interface gtk-theme 'Mint-Y-Dark-Sand'
-gsettings set org.cinnamon.desktop.interface icon-theme 'Mint-Y-Sand'
-gsettings set org.cinnamon.desktop.interface font-name 'Noto Sans 10'
-gsettings set org.nemo.desktop font 'Noto Sans 10'
-gsettings set org.gnome.desktop.interface document-font-name 'Noto Sans 10'
-gsettings set org.cinnamon.desktop.wm.preferences theme 'Mint-Y'
-gsettings set org.cinnamon.desktop.wm.preferences titlebar-uses-system-font true
-gsettings set org.cinnamon.desktop.wm.preferences audible-bell false
+### Set cinnamon theme
+chmod u+x $$CWD/scripts/cinnamon_theme.sh
+./$CWD/scripts/cinnamon_theme.sh
+
+## Set grub theme
 
 ### Changing default plymouth theme to minteirb to change the boot image
 sudo ln -srf /usr/share/plymouth/themes/minteirb/minteirb.plymouth /etc/alternatives/default.plymouth
@@ -45,6 +46,24 @@ sudo update-initramfs -u
 ### Add a nice grub theme to a nicer one
 sudo mkdir -p /boot/grub/themes
 sudo tar -xzf $CWD/assets/darkmatter_grub.tar.gz -C /boot/grub/themes/
+
+### Setting grub defaults
+### changing the name in grub defaults
+sed -i -e 's/Ubuntu/Minteirb/g' /etc/default/grub
+### set timeout before boot to 5 seconds
+sed -i -e 's/^GRUB_TIMEOUT_STYLE=hidden$/# GRUB_TIMEOUT_STYLE=hidden/' /etc/default/grub
+sed -i -e 's/^GRUB_TIMEOUT=0$/GRUB_TIMEOUT=5/' /etc/default/grub
+### set a nice grub theme
+if ! grep -q -E '^GRUB_THEME=.*$' /etc/default/grub
+then
+    echo 'GRUB_THEME="/boot/grub/themes/darkmatter/theme.txt"' >> /etc/default/grub
+else
+    sed -i -E -e 's/^GRUB_THEME=.*$/GRUB_THEME="\/boot\/grub\/themes\/darkmatter\/theme.txt"' /etc/default/grub
+fi
+
+### apply grub config
+update-grub
+
 
 ### Setting up the systemd service to rename the os in grub and other grub custom options
 sudo cp $CWD/scripts/minteirb_grub.sh /opt/minteirb_grub.sh
@@ -129,20 +148,22 @@ echo -e "\033[0m"
 # for vim
 cp $CWD/assets/.vimrc $HOME/.vimrc
 
-# for emacs (actually, that's just a dark theme, perhaps we will have a better config later...)
+# for emacs
 cp $CWD/assets/.emacs $HOME/.emacs
 
 # nvim MiniMax
 # (I know, kickstart is good, but I do not want to waste my time installing the f*****g 1.5GB of tree-sitter-cli when setting up a new machine
 # MiniMax does not complains about this missing tree-sitter-cli)
+rm -rf $HOME/.MiniMax
 git clone --filter=blob:none https://github.com/nvim-mini/MiniMax $HOME/.MiniMax
 nvim -l $HOME/.MiniMax/setup.lua # setup MiniMax
 
 # install a nerd font (JetBrains Mono NF) / otherwise, nvim looks buggy because of glyphs and icons
 cd /tmp
-wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.tar.xz
-sudo mkdir -p /usr/local/share/fonts/JetBrainsMono
-sudo tar xJf JetBrainsMono.tar.xz -C /usr/local/share/fonts/JetBrainsMono # extract archive
+wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMonoNF.tar.xz
+sudo rm -rf /usr/local/share/fonts/JetBrainsMonoNF
+sudo mkdir -p /usr/local/share/fonts/JetBrainsMonoNF
+sudo tar xJf JetBrainsMonoNF.tar.xz -C /usr/local/share/fonts/JetBrainsMonoNF # extract archive
 sudo fc-cache -f # rebuild font cache
 
 echo -e "\033[32m"
