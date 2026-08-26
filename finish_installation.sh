@@ -1,18 +1,19 @@
 #!/bin/bash
 EDITOR_PKGS="vim emacs codium" # we will install neovim separately due to the VERY old version that is available on the Mint repos
-COMPILER_PKGS="gcc g++ clang gfortran make nodejs npm clang-format clang-tidy yasm texlive"
-PYTHON_PKGS="python-is-python3 python3-pip python3-numpy python3-matplotlib"
-DEVTOOLS_PKGS="gdb valgrind gnuplot sl wireshark"
+COMPILER_PKGS="gcc g++ clang gfortran make nodejs npm clang-format clang-tidy yasm texlive" # some compilers
+PYTHON_PKGS="python-is-python3 python3-pip python3-numpy python3-matplotlib" # useful python packages
+DEVTOOLS_PKGS="gdb valgrind gnuplot sl wireshark" # some other useful tools for dev
+OTHER_PKGS="numlockx"
 TOOLS_PKGS="wget gpg git" # these are needed for other commands, so we should install them first
 
-PKGS="$EDITOR_PKGS $COMPILER_PKGS $DEVTOOLS_PKGS $PYTHON_PKGS"
+PKGS="$EDITOR_PKGS $COMPILER_PKGS $DEVTOOLS_PKGS $PYTHON_PKGS $OTHER_PKGS"
 
 CWD=$(pwd)
 
 ID=1000 #Id of the first (and probably sole) user
 USER=$(id -nu $ID)
 
-set -e
+set -e # exit on error
 
 echo -e "\033[33m"
 echo "╭───────────────────────────╮"
@@ -22,10 +23,12 @@ echo -e "\033[0m"
 
 ## Copy files
 ### Adding minteirb theme and background files
+
 # if script was previously run, deleting the directories allows to update files
 sudo rm -rf /usr/local/share/minteirb
 sudo rm -rf /usr/share/plymouth/themes/minteirb
 
+# Copy all assets
 sudo cp -r $CWD/assets /usr/local/share/minteirb
 sudo cp -r $CWD/assets/minteirb_theme /usr/share/plymouth/themes/minteirb
 sudo cp $CWD/assets/wallpapers/minteirb.png /usr/share/backgrounds
@@ -43,12 +46,12 @@ $CWD/scripts/cinnamon_theme.sh
 sudo ln -srf /usr/share/plymouth/themes/minteirb/minteirb.plymouth /etc/alternatives/default.plymouth
 sudo update-initramfs -u
 
-### Add a nice grub theme to a nicer one
+### Add a cool grub theme
 sudo mkdir -p /boot/grub/themes
 sudo tar -xzf $CWD/assets/darkmatter_grub.tar.gz -C /boot/grub/themes/
 
 ### Setting grub defaults
-### || true allows the script to run multiple times
+### || true allows the script to run multiple times (else, sed returns an error and the script stop)
 ### changing the name in grub defaults
 sudo sed -i -e 's/Ubuntu/Minteirb/g' /etc/default/grub || true
 ### set timeout before boot to 5 seconds
@@ -67,6 +70,7 @@ sudo update-grub
 
 
 ### Setting up the systemd service to rename the os in grub and other grub custom options
+### needed after some updates that overwrites the os name
 sudo cp $CWD/scripts/minteirb_grub.sh /opt/minteirb_grub.sh
 sudo chmod +x /opt/minteirb_grub.sh
 sudo cp $CWD/scripts/minteirb_grub.service /etc/systemd/system
@@ -80,6 +84,7 @@ echo "│ Adding cheatsheets... │"
 echo "╰───────────────────────╯"
 echo -e "\033[0m"
 
+### Sometimes, Desktop is in french (Bureau) so make sure the cheatsheets are in the correct location
 if [[ -e "$HOME/Desktop" ]]; then
     sudo cp -r $CWD/desktop_files/* $HOME/Desktop
     sudo chown --recursive $USER $HOME/Desktop
@@ -121,18 +126,19 @@ echo -e 'Types: deb\nURIs: https://download.vscodium.com/debs\nSuites: vscodium\
 | sudo tee /etc/apt/sources.list.d/vscodium.sources
 
 sudo apt-get update
+# try to skip the popup to confirm some things while installing packages: doesn't work always
 sudo DEBIAN_FRONTED=noninteractive apt-get install -y $PKGS
 
 cd /usr/local/bin/
-archi=$(uname -m) # supports only aarch64 and x86_64
+archi=$(uname -m) # supports only aarch64 and x86_64: glhf if arch is something else
 
 # Install Typst
 typst_folder="typst-$archi-unknown-linux-musl"
 sudo wget https://github.com/typst/typst/releases/download/v0.14.2/$typst_folder.tar.xz
 sudo tar xJf $typst_folder.tar.xz # extract archive
 sudo chmod +x $typst_folder/typst # make file executable
-sudo ln -rfs $typst_folder/typst typst # create a link for nvim to be in the Path
-sudo rm $typst_folder.tar.xz
+sudo ln -rfs $typst_folder/typst typst # create a link for typst to be in the Path
+sudo rm $typst_folder.tar.xz # remove archive (we do not need it anymore)
 
 # for neovim now. I know, that's a lot of stuff but you know "When it's ready" doesn't mean the same thing for Debian and for Neovim
 nvim_folder="nvim-linux-$archi"
@@ -148,6 +154,9 @@ echo "│ Adding some configurations... │"
 echo "╰───────────────────────────────╯"
 echo -e "\033[0m"
 
+# set num lock at startup
+echo "greeter-setup-script=/usr/bin/numlockx on" | sudo tee -a /etc/lightdm/lightdm.conf
+
 # for vim
 cp $CWD/assets/.vimrc $HOME/.vimrc
 
@@ -155,13 +164,14 @@ cp $CWD/assets/.vimrc $HOME/.vimrc
 cp $CWD/assets/.emacs $HOME/.emacs
 
 # nvim MiniMax
-# (I know, kickstart is good, but I do not want to waste my time installing the f*****g 1.5GB of tree-sitter-cli when setting up a new machine
+# (I know, kickstart is good, but I do not want to waste my time installing the fucking 1.5GB of tree-sitter-cli when setting up a new machine
 # MiniMax does not complains about this missing tree-sitter-cli)
 rm -rf $HOME/.MiniMax
 git clone --filter=blob:none https://github.com/nvim-mini/MiniMax $HOME/.MiniMax
 nvim -l $HOME/.MiniMax/setup.lua # setup MiniMax
 
 # install a nerd font (JetBrains Mono NF) / otherwise, nvim looks buggy because of glyphs and icons
+# plus nerd fonts are cool and JetBrains Mono is nice
 cd /tmp
 wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.tar.xz
 sudo rm -rf /usr/local/share/fonts/JetBrainsMono
@@ -180,8 +190,9 @@ echo -e "\tthis terminal will close automatically: press ENTER."
 read
 
 # because changing monospace font it's quite buggy, we need to close and then reopen a terminal to make the font displaying correctly
+# doesn't work always but it's okay
 gsettings set org.gnome.desktop.interface monospace-font-name 'JetBrainsMono Nerd Font 10' # set as default monospace font
 (gnome-terminal -- nvim)& disown # open a terminal to install nvim plugins
 (gnome-terminal -- emacs --no-window-system)& disown # open emacs to install emacs plugins
 sleep 2 # wait a moment (need a moment to disown before killing parent pid)
-(kill -9 $PPID) # close the parent terminal
+(kill -9 $PPID) # close the parent terminal: I know that's ugly, but it's cool.
