@@ -15,6 +15,15 @@ USER=$(id -nu $ID)
 
 set -e # exit on error
 
+
+echo -e "\033[33m"
+echo "╭────────────────╮"
+echo "│ Check perms... │"
+echo "╰────────────────╯"
+echo -e "\033[0m"
+
+sudo echo -e "\033[32mCan use sudo\!\033[0m" || (echo -e "\033[31mCannot use sudo\!\033[0m" && exit 67)
+
 echo -e "\033[33m"
 echo "╭───────────────────────────╮"
 echo "│ Setting Minteirb theme... │"
