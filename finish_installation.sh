@@ -164,6 +164,7 @@ echo "╰───────────────────────�
 echo -e "\033[0m"
 
 # set num lock at startup
+echo "[Seat]" | sudo tee -a /etc/lightdm/lightdm.conf
 echo "greeter-setup-script=/usr/bin/numlockx on" | sudo tee -a /etc/lightdm/lightdm.conf
 
 # for vim
