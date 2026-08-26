@@ -61,8 +61,7 @@ sudo tar -xzf $CWD/assets/darkmatter_grub.tar.gz -C /boot/grub/themes/
 
 ### Setting grub defaults
 ### || true allows the script to run multiple times (else, sed returns an error and the script stop)
-### changing the name in grub defaults
-sudo sed -i -e 's/Ubuntu/Minteirb/g' /etc/default/grub || true
+
 ### set timeout before boot to 5 seconds
 sudo sed -i -e 's/^GRUB_TIMEOUT_STYLE=hidden$/# GRUB_TIMEOUT_STYLE=hidden/' /etc/default/grub || true
 sudo sed -i -e 's/^GRUB_TIMEOUT=0$/GRUB_TIMEOUT=5/' /etc/default/grub || true
@@ -74,10 +73,6 @@ else
     sudo sed -i -E -e 's/^GRUB_THEME=.*$/GRUB_THEME="\/boot\/grub\/themes\/darkmatter\/theme.txt"' /etc/default/grub
 fi
 
-### apply grub config
-sudo update-grub
-
-
 ### Setting up the systemd service to rename the os in grub and other grub custom options
 ### needed after some updates that overwrites the os name
 sudo cp $CWD/scripts/minteirb_grub.sh /opt/minteirb_grub.sh
@@ -86,6 +81,10 @@ sudo cp $CWD/scripts/minteirb_grub.service /etc/systemd/system
 sudo systemctl daemon-reload
 sudo systemctl enable minteirb_grub.service
 sudo /opt/minteirb_grub.sh
+
+### apply grub config
+sudo update-grub
+
 
 echo -e "\033[33m"
 echo "╭───────────────────────╮"
