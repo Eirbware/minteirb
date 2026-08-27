@@ -1,13 +1,7 @@
-This is the script used to create the minteirb iso.
+# Minteirb
+
+Minteirb is a set of scripts used to automatically configure a Linux Mint installation (tested on Linux Mint 22.3 **only**).
 
 ## How to use
 
-After cloning the repo, insert a linux mint iso (tested with nothing actually) inside the `iso` folder.
-Afterwards, run:
-
-```sh 
-docker compose up; docker compose down
-```
-
-This will create and run a docker which will create a minteirb iso.
-When finished, the iso will be in the `new-iso` folder.
+Fully install Linux Mint on the computer. Then, just run `./finish_installation.sh` from a terminal and follow the instructions if needed.
