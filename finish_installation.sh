@@ -33,7 +33,7 @@ echo -e "\033[0m"
 ## Copy files
 ### Adding minteirb theme and background files
 
-# if script was previously run, deleting the directories allows to update files
+# if script was already previously run, deleting the directories allows to update files
 sudo rm -rf /usr/local/share/minteirb
 sudo rm -rf /usr/share/plymouth/themes/minteirb
 
@@ -60,9 +60,9 @@ sudo mkdir -p /boot/grub/themes
 sudo tar -xzf $CWD/assets/darkmatter_grub.tar.gz -C /boot/grub/themes/
 
 ### Setting grub defaults
-### || true allows the script to run multiple times (else, sed returns an error and the script stop)
+### || true allows the script to run multiple times (else, sed returns an error and the script stop: annoying)
 
-### set timeout before boot to 5 seconds
+### set timeout before boot to 5 seconds (because our grub is beautiful so we need time to admire it)
 sudo sed -i -e 's/^GRUB_TIMEOUT_STYLE=hidden$/# GRUB_TIMEOUT_STYLE=hidden/' /etc/default/grub || true
 sudo sed -i -e 's/^GRUB_TIMEOUT=0$/GRUB_TIMEOUT=5/' /etc/default/grub || true
 ### set a nice grub theme
@@ -134,7 +134,7 @@ echo -e 'Types: deb\nURIs: https://download.vscodium.com/debs\nSuites: vscodium\
 | sudo tee /etc/apt/sources.list.d/vscodium.sources
 
 sudo apt-get update
-# try to skip the popup to confirm some things while installing packages: doesn't work always
+# try to skip the popup to confirm some things while installing packages: doesn't work always (this is a lie, it NEVER works)
 sudo DEBIAN_FRONTED=noninteractive apt-get install -y $PKGS
 
 cd /usr/local/bin/
@@ -148,7 +148,7 @@ sudo chmod +x $typst_folder/typst # make file executable
 sudo ln -rfs $typst_folder/typst typst # create a link for typst to be in the Path
 sudo rm $typst_folder.tar.xz # remove archive (we do not need it anymore)
 
-# for neovim now. I know, that's a lot of stuff but you know "When it's ready" doesn't mean the same thing for Debian and for Neovim
+# for neovim now. I know, that's a lot of stuff but you know "When it's ready" doesn't mean the same thing for Debian and for Neovim... So we want the latest Neovim version and we have to install it manually...
 nvim_folder="nvim-linux-$archi"
 sudo wget https://github.com/neovim/neovim/releases/download/stable/$nvim_folder.tar.gz # download latest nvim releases for the computer's architecture
 sudo tar xzf $nvim_folder.tar.gz # extract archive
@@ -163,6 +163,7 @@ echo "╰───────────────────────�
 echo -e "\033[0m"
 
 # set num lock at startup
+# this is supposed to work but it is untested.
 echo "[Seat]" | sudo tee -a /etc/lightdm/lightdm.conf
 echo "greeter-setup-script=/usr/bin/numlockx on" | sudo tee -a /etc/lightdm/lightdm.conf
 
@@ -175,16 +176,16 @@ cp $CWD/assets/.emacs $HOME/.emacs
 # nvim MiniMax
 # (I know, kickstart is good, but I do not want to waste my time installing the fucking 1.5GB of tree-sitter-cli when setting up a new machine
 # MiniMax does not complains about this missing tree-sitter-cli)
-rm -rf $HOME/.MiniMax
+rm -rf $HOME/.MiniMax # remove the old MiniMax files if the script was already previously run
 git clone --filter=blob:none https://github.com/nvim-mini/MiniMax $HOME/.MiniMax
 nvim -l $HOME/.MiniMax/setup.lua # setup MiniMax
 
 # install a nerd font (JetBrains Mono NF) / otherwise, nvim looks buggy because of glyphs and icons
 # plus nerd fonts are cool and JetBrains Mono is nice
 cd /tmp
-wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.tar.xz
-sudo rm -rf /usr/local/share/fonts/JetBrainsMono
-sudo mkdir -p /usr/local/share/fonts/JetBrainsMono
+wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.tar.xz # download archive
+sudo rm -rf /usr/local/share/fonts/JetBrainsMono # remove old JetBrains Mono font if script was run previously
+sudo mkdir -p /usr/local/share/fonts/JetBrainsMono # create folder
 sudo tar xJf JetBrainsMono.tar.xz -C /usr/local/share/fonts/JetBrainsMono # extract archive
 sudo fc-cache -f # rebuild font cache
 
@@ -199,8 +200,9 @@ echo -e "\tthis terminal will close automatically: press ENTER."
 read
 
 # because changing monospace font it's quite buggy, we need to close and then reopen a terminal to make the font displaying correctly
-# doesn't work always but it's okay
+# doesn't work always but it's okay, it's just a temporary display bug
 gsettings set org.gnome.desktop.interface monospace-font-name 'JetBrainsMono Nerd Font 10' # set as default monospace font
+sleep 1 # wait a moment (need a moment to change default font)
 (gnome-terminal -- nvim)& disown # open a terminal to install nvim plugins
 (gnome-terminal -- emacs --no-window-system)& disown # open emacs to install emacs plugins
 sleep 2 # wait a moment (need a moment to disown before killing parent pid)
