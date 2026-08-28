@@ -219,5 +219,5 @@ gsettings set org.gnome.desktop.interface monospace-font-name 'JetBrainsMono Ner
 sleep 1 # wait a moment (need a moment to change default font)
 (gnome-terminal -- nvim)& disown # open a terminal to install nvim plugins
 (gnome-terminal -- emacs --no-window-system)& disown # open emacs to install emacs plugins
-sleep 2 # wait a moment (need a moment to disown before killing parent pid)
-(kill -9 $PPID) # close the parent terminal: I know that's ugly, but it's cool.
+# sleep 2 # wait a moment (need a moment to disown before killing parent pid)
+# (kill -9 $PPID) # close the parent terminal: I know that's ugly, but it's cool.
