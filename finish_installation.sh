@@ -109,14 +109,28 @@ else
 fi
 
 echo -e "\033[33m"
+echo "╭─────────────────────────────╮"
+echo "│ Selecting better mirrors... │"
+echo "╰─────────────────────────────╯"
+echo -e "\033[0m"
+
+# location of sources file
+SOURCES_FILE=/etc/apt/sources.list.d/official-package-repositories.list
+# backup files
+sudo cp $SOURCES_FILE{,.bak}
+# change mint mirror
+sudo sed -i -e 's,packages.linuxmint.com,mirrors.univ-reims.fr/mint,' $SOURCES_FILE
+# change ubuntu base mirror
+sudo sed -i -e 's,archive.ubuntu.com/ubuntu,pkg.adfinis.com/ubuntu,g' $SOURCES_FILE
+# update local cache
+sudo apt-get update
+
+echo -e "\033[33m"
 echo "╭───────────────────────────────╮"
 echo "│ Installing important utils... │"
 echo "╰───────────────────────────────╯"
 echo -e "\033[0m"
 
-# TODO: change mirror repo
-
-sudo apt-get update
 sudo apt-get install -y $TOOLS_PKGS
 
 echo -e "\033[33m"
