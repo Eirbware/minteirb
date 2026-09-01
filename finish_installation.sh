@@ -2,7 +2,7 @@
 EDITOR_PKGS="vim emacs codium" # we will install neovim separately due to the VERY old version that is available on the Mint repos
 COMPILER_PKGS="gcc g++ clang gfortran make nodejs npm clang-format clang-tidy yasm texlive" # some compilers
 PYTHON_PKGS="python-is-python3 python3-pip python3-numpy python3-matplotlib python3-venv" # useful python packages
-DEVTOOLS_PKGS="gdb valgrind gnuplot sl wireshark" # some other useful tools for dev
+DEVTOOLS_PKGS="gdb valgrind gnuplot sl" # some other useful tools for dev
 OTHER_PKGS="numlockx"
 TOOLS_PKGS="wget gpg git" # these are needed for other commands, so we should install them first
 
@@ -70,7 +70,7 @@ if ! sudo grep -q -E '^GRUB_THEME=.*$' /etc/default/grub
 then
     echo 'GRUB_THEME="/boot/grub/themes/darkmatter/theme.txt"' | sudo tee -a /etc/default/grub
 else
-    sudo sed -i -E -e 's/^GRUB_THEME=.*$/GRUB_THEME="\/boot\/grub\/themes\/darkmatter\/theme.txt"' /etc/default/grub
+    sudo sed -i -E -e 's/^GRUB_THEME=.*$/GRUB_THEME="\/boot\/grub\/themes\/darkmatter\/theme.txt"' /etc/default/grub || true
 fi
 
 ### Setting up the systemd service to rename the os in grub and other grub custom options
@@ -119,9 +119,9 @@ SOURCES_FILE=/etc/apt/sources.list.d/official-package-repositories.list
 # backup files
 sudo cp $SOURCES_FILE{,.bak}
 # change mint mirror
-sudo sed -i -e 's,packages.linuxmint.com,mirrors.univ-reims.fr/mint,' $SOURCES_FILE
+sudo sed -i -e 's,packages.linuxmint.com,mirrors.univ-reims.fr/mint,' $SOURCES_FILE || true
 # change ubuntu base mirror
-sudo sed -i -e 's,archive.ubuntu.com/ubuntu,pkg.adfinis.com/ubuntu,g' $SOURCES_FILE
+sudo sed -i -e 's,archive.ubuntu.com/ubuntu,pkg.adfinis.com/ubuntu,g' $SOURCES_FILE || true
 # update local cache
 sudo apt-get update
 
