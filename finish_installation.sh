@@ -70,7 +70,7 @@ if ! sudo grep -q -E '^GRUB_THEME=.*$' /etc/default/grub
 then
     echo 'GRUB_THEME="/boot/grub/themes/darkmatter/theme.txt"' | sudo tee -a /etc/default/grub
 else
-    sudo sed -i -E -e 's/^GRUB_THEME=.*$/GRUB_THEME="\/boot\/grub\/themes\/darkmatter\/theme.txt"' /etc/default/grub
+    sudo sed -i -E -e 's/^GRUB_THEME=.*$/GRUB_THEME="\/boot\/grub\/themes\/darkmatter\/theme.txt"' /etc/default/grub || true
 fi
 
 ### Setting up the systemd service to rename the os in grub and other grub custom options
@@ -119,9 +119,9 @@ SOURCES_FILE=/etc/apt/sources.list.d/official-package-repositories.list
 # backup files
 sudo cp $SOURCES_FILE{,.bak}
 # change mint mirror
-sudo sed -i -e 's,packages.linuxmint.com,mirrors.univ-reims.fr/mint,' $SOURCES_FILE
+sudo sed -i -e 's,packages.linuxmint.com,mirrors.univ-reims.fr/mint,' $SOURCES_FILE || true
 # change ubuntu base mirror
-sudo sed -i -e 's,archive.ubuntu.com/ubuntu,pkg.adfinis.com/ubuntu,g' $SOURCES_FILE
+sudo sed -i -e 's,archive.ubuntu.com/ubuntu,pkg.adfinis.com/ubuntu,g' $SOURCES_FILE || true
 # update local cache
 sudo apt-get update
 
