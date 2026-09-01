@@ -51,33 +51,33 @@ MessageBelowAnimation=true
 
 [boot-up]
 UseEndAnimation=false
-UseFirmwareBackground=true
+UseFirmwareBackground=false
 
 [shutdown]
 UseEndAnimation=false
-UseFirmwareBackground=true
+UseFirmwareBackground=false
 
 [reboot]
 UseEndAnimation=false
-UseFirmwareBackground=true
+UseFirmwareBackground=false
 
 [updates]
 SuppressMessages=true
 ProgressBarShowPercentComplete=true
 UseProgressBar=true
 Title=Installing Updates...
-SubTitle=Do not turn off your computer
+SubTitle=Do not turn off your computer (Eirbware is watching you!)
 
 [system-upgrade]
 SuppressMessages=true
 ProgressBarShowPercentComplete=true
 UseProgressBar=true
 Title=Upgrading System...
-SubTitle=Do not turn off your computer
+SubTitle=Do not turn off your computer (Eirbware is watching you!)
 
 [firmware-upgrade]
 SuppressMessages=true
 ProgressBarShowPercentComplete=true
 UseProgressBar=true
 Title=Upgrading Firmware...
-SubTitle=Do not turn off your computer
+SubTitle=Do not turn off your computer (Eirbware is watching you!)
