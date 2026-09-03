@@ -1,6 +1,6 @@
 #!/bin/bash
 EDITOR_PKGS="vim emacs codium" # we will install neovim separately due to the VERY old version that is available on the Mint repos
-COMPILER_PKGS="gcc g++ clang gfortran make nodejs npm clang-format clang-tidy yasm texlive" # some compilers
+COMPILER_PKGS="gcc g++ clang gfortran make nodejs npm clang-format clang-tidy yasm texlive texlive-lang-french" # some compilers
 PYTHON_PKGS="python-is-python3 python3-pip python3-numpy python3-matplotlib python3-venv" # useful python packages
 DEVTOOLS_PKGS="gdb valgrind gnuplot sl" # some other useful tools for dev
 OTHER_PKGS="numlockx"
