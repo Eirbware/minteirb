@@ -62,6 +62,9 @@ sudo tar -xzf $CWD/assets/darkmatter_grub.tar.gz -C /boot/grub/themes/
 ### Setting grub defaults
 ### || true allows the script to run multiple times (else, sed returns an error and the script stop: annoying)
 
+sudo cp $CWD/scripts/07_os-prober /etc/grub.d/07_os-prober
+sudo rm /etc/grub.d/30_os-prober || true
+
 ### set timeout before boot to 5 seconds (because our grub is beautiful so we need time to admire it)
 sudo sed -i -e 's/^GRUB_TIMEOUT_STYLE=hidden$/# GRUB_TIMEOUT_STYLE=hidden/' /etc/default/grub || true
 sudo sed -i -e 's/^GRUB_TIMEOUT=0$/GRUB_TIMEOUT=5/' /etc/default/grub || true
